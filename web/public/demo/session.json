@@ -1,0 +1,969 @@
+{
+  "schema": "yapcad-viewer-session-v1",
+  "sessionId": "77777777-7777-4777-8777-777777777777",
+  "revision": 0,
+  "package": {
+    "name": "YapRover suspension prototype",
+    "version": "0.1.0",
+    "digest": "sha256:e1b67056e95f7d46e337b06f83cf678b1a147c56efc7519cf3a61957dc4ff90e",
+    "rootPartId": "chassis"
+  },
+  "components": [
+    {
+      "id": "chassis-proxy",
+      "name": "Chassis tub",
+      "description": "YapRover suspension showcase component",
+      "disposition": "make",
+      "quantityPerInstance": 1.0,
+      "unit": "each",
+      "partNumber": null,
+      "revision": "A",
+      "materialId": "petg",
+      "manufacturing": {
+        "process": "FDM",
+        "material": "PET-G"
+      },
+      "procurement": null,
+      "pmi": null,
+      "assetDigest": "sha256:25e5a28d9336083fed9b2fca9ea064234363b35b409aeb5e9d9b667c918113df"
+    },
+    {
+      "id": "rocker-proxy",
+      "name": "Rocker link",
+      "description": "YapRover suspension showcase component",
+      "disposition": "make",
+      "quantityPerInstance": 1.0,
+      "unit": "each",
+      "partNumber": null,
+      "revision": "A",
+      "materialId": "petg",
+      "manufacturing": {
+        "process": "FDM",
+        "material": "PET-G"
+      },
+      "procurement": null,
+      "pmi": null,
+      "assetDigest": "sha256:bbbb0f9d7b1c97dff6d4cd99721633932ba14ff84696cdaba5cb90a3e4726d3f"
+    },
+    {
+      "id": "bogie-proxy",
+      "name": "Bogie link",
+      "description": "YapRover suspension showcase component",
+      "disposition": "make",
+      "quantityPerInstance": 1.0,
+      "unit": "each",
+      "partNumber": null,
+      "revision": "A",
+      "materialId": "petg",
+      "manufacturing": {
+        "process": "FDM",
+        "material": "PET-G"
+      },
+      "procurement": null,
+      "pmi": null,
+      "assetDigest": "sha256:83337c271eb930bd1a778cd490bb10bac5c64e92ad5b3e6a4eb43e468a11b49f"
+    },
+    {
+      "id": "wheel-proxy",
+      "name": "Wheel and hub",
+      "description": "YapRover suspension showcase component",
+      "disposition": "make",
+      "quantityPerInstance": 1.0,
+      "unit": "each",
+      "partNumber": null,
+      "revision": "A",
+      "materialId": "petg",
+      "manufacturing": {
+        "process": "FDM",
+        "material": "PET-G"
+      },
+      "procurement": null,
+      "pmi": null,
+      "assetDigest": "sha256:ca60f390d122ad12d18b04912210c391d307dfc43bad5f8b22c36e5e35725ad8"
+    }
+  ],
+  "parts": [
+    {
+      "id": "chassis",
+      "name": "Chassis",
+      "componentId": "chassis-proxy",
+      "parentId": null,
+      "materialId": "petg",
+      "assetDigest": "sha256:25e5a28d9336083fed9b2fca9ea064234363b35b409aeb5e9d9b667c918113df",
+      "transform": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "datums": [
+        {
+          "id": "left_rocker",
+          "kind": "axis",
+          "origin": [
+            0.0,
+            155.0,
+            0.0
+          ],
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "id": "right_rocker",
+          "kind": "axis",
+          "origin": [
+            0.0,
+            -155.0,
+            0.0
+          ],
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      ],
+      "visible": true
+    },
+    {
+      "id": "left_rocker",
+      "name": "Left rocker",
+      "componentId": "rocker-proxy",
+      "parentId": "chassis",
+      "materialId": "petg",
+      "assetDigest": "sha256:bbbb0f9d7b1c97dff6d4cd99721633932ba14ff84696cdaba5cb90a3e4726d3f",
+      "transform": [
+        0.9902680687415704,
+        0.0,
+        -0.13917310096006544,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.13917310096006544,
+        0.0,
+        0.9902680687415704,
+        0.0,
+        0.0,
+        155.0,
+        0.0,
+        1.0
+      ],
+      "datums": [
+        {
+          "id": "chassis_pivot",
+          "kind": "axis",
+          "origin": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "id": "front_axle",
+          "kind": "axis",
+          "origin": [
+            190.0,
+            0.0,
+            -75.0
+          ],
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "id": "bogie_pivot",
+          "kind": "axis",
+          "origin": [
+            -95.0,
+            0.0,
+            -35.0
+          ],
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      ],
+      "visible": true
+    },
+    {
+      "id": "right_rocker",
+      "name": "Right rocker",
+      "componentId": "rocker-proxy",
+      "parentId": "chassis",
+      "materialId": "petg",
+      "assetDigest": "sha256:bbbb0f9d7b1c97dff6d4cd99721633932ba14ff84696cdaba5cb90a3e4726d3f",
+      "transform": [
+        0.9902680687415704,
+        0.0,
+        0.13917310096006544,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        -0.13917310096006544,
+        0.0,
+        0.9902680687415704,
+        0.0,
+        0.0,
+        -155.0,
+        0.0,
+        1.0
+      ],
+      "datums": [
+        {
+          "id": "chassis_pivot",
+          "kind": "axis",
+          "origin": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "id": "front_axle",
+          "kind": "axis",
+          "origin": [
+            190.0,
+            0.0,
+            -75.0
+          ],
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "id": "bogie_pivot",
+          "kind": "axis",
+          "origin": [
+            -95.0,
+            0.0,
+            -35.0
+          ],
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      ],
+      "visible": true
+    },
+    {
+      "id": "left_bogie",
+      "name": "Left bogie",
+      "componentId": "bogie-proxy",
+      "parentId": "left_rocker",
+      "materialId": "petg",
+      "assetDigest": "sha256:83337c271eb930bd1a778cd490bb10bac5c64e92ad5b3e6a4eb43e468a11b49f",
+      "transform": [
+        0.9902680687415704,
+        0.0,
+        -0.13917310096006544,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.13917310096006544,
+        0.0,
+        0.9902680687415704,
+        0.0,
+        -98.94652506405149,
+        155.0,
+        -21.437937814748746,
+        1.0
+      ],
+      "datums": [
+        {
+          "id": "rocker_pivot",
+          "kind": "axis",
+          "origin": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "id": "middle_axle",
+          "kind": "axis",
+          "origin": [
+            95.0,
+            0.0,
+            -40.0
+          ],
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "id": "rear_axle",
+          "kind": "axis",
+          "origin": [
+            -95.0,
+            0.0,
+            -40.0
+          ],
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      ],
+      "visible": true
+    },
+    {
+      "id": "right_bogie",
+      "name": "Right bogie",
+      "componentId": "bogie-proxy",
+      "parentId": "right_rocker",
+      "materialId": "petg",
+      "assetDigest": "sha256:83337c271eb930bd1a778cd490bb10bac5c64e92ad5b3e6a4eb43e468a11b49f",
+      "transform": [
+        0.9902680687415704,
+        0.0,
+        0.13917310096006544,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        -0.13917310096006544,
+        0.0,
+        0.9902680687415704,
+        0.0,
+        -89.2044079968469,
+        -155.0,
+        -47.88082699716118,
+        1.0
+      ],
+      "datums": [
+        {
+          "id": "rocker_pivot",
+          "kind": "axis",
+          "origin": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "id": "middle_axle",
+          "kind": "axis",
+          "origin": [
+            95.0,
+            0.0,
+            -40.0
+          ],
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "id": "rear_axle",
+          "kind": "axis",
+          "origin": [
+            -95.0,
+            0.0,
+            -40.0
+          ],
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      ],
+      "visible": true
+    },
+    {
+      "id": "left_front_wheel",
+      "name": "Left front wheel",
+      "componentId": "wheel-proxy",
+      "parentId": "left_rocker",
+      "materialId": "petg",
+      "assetDigest": "sha256:ca60f390d122ad12d18b04912210c391d307dfc43bad5f8b22c36e5e35725ad8",
+      "transform": [
+        0.9902680687415704,
+        0.0,
+        -0.13917310096006544,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.13917310096006544,
+        0.0,
+        0.9902680687415704,
+        0.0,
+        177.71295048889348,
+        155.0,
+        -100.71299433803021,
+        1.0
+      ],
+      "datums": [
+        {
+          "id": "axle",
+          "kind": "axis",
+          "origin": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      ],
+      "visible": true
+    },
+    {
+      "id": "left_middle_wheel",
+      "name": "Left middle wheel",
+      "componentId": "wheel-proxy",
+      "parentId": "left_bogie",
+      "materialId": "petg",
+      "assetDigest": "sha256:ca60f390d122ad12d18b04912210c391d307dfc43bad5f8b22c36e5e35725ad8",
+      "transform": [
+        0.9902680687415704,
+        0.0,
+        -0.13917310096006544,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.13917310096006544,
+        0.0,
+        0.9902680687415704,
+        0.0,
+        -10.437982572004913,
+        155.0,
+        -74.27010515561778,
+        1.0
+      ],
+      "datums": [
+        {
+          "id": "axle",
+          "kind": "axis",
+          "origin": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      ],
+      "visible": true
+    },
+    {
+      "id": "left_rear_wheel",
+      "name": "Left rear wheel",
+      "componentId": "wheel-proxy",
+      "parentId": "left_bogie",
+      "materialId": "petg",
+      "assetDigest": "sha256:ca60f390d122ad12d18b04912210c391d307dfc43bad5f8b22c36e5e35725ad8",
+      "transform": [
+        0.9902680687415704,
+        0.0,
+        -0.13917310096006544,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.13917310096006544,
+        0.0,
+        0.9902680687415704,
+        0.0,
+        -198.5889156329033,
+        155.0,
+        -47.82721597320534,
+        1.0
+      ],
+      "datums": [
+        {
+          "id": "axle",
+          "kind": "axis",
+          "origin": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      ],
+      "visible": true
+    },
+    {
+      "id": "right_front_wheel",
+      "name": "Right front wheel",
+      "componentId": "wheel-proxy",
+      "parentId": "right_rocker",
+      "materialId": "petg",
+      "assetDigest": "sha256:ca60f390d122ad12d18b04912210c391d307dfc43bad5f8b22c36e5e35725ad8",
+      "transform": [
+        0.9902680687415704,
+        0.0,
+        0.13917310096006544,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        -0.13917310096006544,
+        0.0,
+        0.9902680687415704,
+        0.0,
+        198.58891563290328,
+        -155.0,
+        -47.82721597320534,
+        1.0
+      ],
+      "datums": [
+        {
+          "id": "axle",
+          "kind": "axis",
+          "origin": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      ],
+      "visible": true
+    },
+    {
+      "id": "right_middle_wheel",
+      "name": "Right middle wheel",
+      "componentId": "wheel-proxy",
+      "parentId": "right_bogie",
+      "materialId": "petg",
+      "assetDigest": "sha256:ca60f390d122ad12d18b04912210c391d307dfc43bad5f8b22c36e5e35725ad8",
+      "transform": [
+        0.9902680687415704,
+        0.0,
+        0.13917310096006544,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        -0.13917310096006544,
+        0.0,
+        0.9902680687415704,
+        0.0,
+        10.437982572004913,
+        -155.0,
+        -74.27010515561778,
+        1.0
+      ],
+      "datums": [
+        {
+          "id": "axle",
+          "kind": "axis",
+          "origin": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      ],
+      "visible": true
+    },
+    {
+      "id": "right_rear_wheel",
+      "name": "Right rear wheel",
+      "componentId": "wheel-proxy",
+      "parentId": "right_bogie",
+      "materialId": "petg",
+      "assetDigest": "sha256:ca60f390d122ad12d18b04912210c391d307dfc43bad5f8b22c36e5e35725ad8",
+      "transform": [
+        0.9902680687415704,
+        0.0,
+        0.13917310096006544,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        -0.13917310096006544,
+        0.0,
+        0.9902680687415704,
+        0.0,
+        -177.71295048889345,
+        -155.0,
+        -100.71299433803021,
+        1.0
+      ],
+      "datums": [
+        {
+          "id": "axle",
+          "kind": "axis",
+          "origin": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      ],
+      "visible": true
+    }
+  ],
+  "mates": [
+    {
+      "id": "left_rocker_pivot",
+      "kind": "revolute",
+      "partA": "chassis",
+      "datumA": "left_rocker",
+      "partB": "left_rocker",
+      "datumB": "chassis_pivot",
+      "offset": 0.0,
+      "angle": 0.0,
+      "limits": {
+        "min_value": -0.3141592653589793,
+        "max_value": 0.3141592653589793
+      }
+    },
+    {
+      "id": "right_rocker_pivot",
+      "kind": "revolute",
+      "partA": "chassis",
+      "datumA": "right_rocker",
+      "partB": "right_rocker",
+      "datumB": "chassis_pivot",
+      "offset": 0.0,
+      "angle": 0.0,
+      "limits": {
+        "min_value": -0.3141592653589793,
+        "max_value": 0.3141592653589793
+      }
+    },
+    {
+      "id": "left_bogie_pivot",
+      "kind": "revolute",
+      "partA": "left_rocker",
+      "datumA": "bogie_pivot",
+      "partB": "left_bogie",
+      "datumB": "rocker_pivot",
+      "offset": 0.0,
+      "angle": 0.0,
+      "limits": {
+        "min_value": -0.6108652381980153,
+        "max_value": 0.6632251157578453
+      }
+    },
+    {
+      "id": "right_bogie_pivot",
+      "kind": "revolute",
+      "partA": "right_rocker",
+      "datumA": "bogie_pivot",
+      "partB": "right_bogie",
+      "datumB": "rocker_pivot",
+      "offset": 0.0,
+      "angle": 0.0,
+      "limits": {
+        "min_value": -0.6108652381980153,
+        "max_value": 0.6632251157578453
+      }
+    },
+    {
+      "id": "left_front_axle",
+      "kind": "revolute",
+      "partA": "left_rocker",
+      "datumA": "front_axle",
+      "partB": "left_front_wheel",
+      "datumB": "axle",
+      "offset": 0.0,
+      "angle": 0.0,
+      "limits": null
+    },
+    {
+      "id": "left_middle_axle",
+      "kind": "revolute",
+      "partA": "left_bogie",
+      "datumA": "middle_axle",
+      "partB": "left_middle_wheel",
+      "datumB": "axle",
+      "offset": 0.0,
+      "angle": 0.0,
+      "limits": null
+    },
+    {
+      "id": "left_rear_axle",
+      "kind": "revolute",
+      "partA": "left_bogie",
+      "datumA": "rear_axle",
+      "partB": "left_rear_wheel",
+      "datumB": "axle",
+      "offset": 0.0,
+      "angle": 0.0,
+      "limits": null
+    },
+    {
+      "id": "right_front_axle",
+      "kind": "revolute",
+      "partA": "right_rocker",
+      "datumA": "front_axle",
+      "partB": "right_front_wheel",
+      "datumB": "axle",
+      "offset": 0.0,
+      "angle": 0.0,
+      "limits": null
+    },
+    {
+      "id": "right_middle_axle",
+      "kind": "revolute",
+      "partA": "right_bogie",
+      "datumA": "middle_axle",
+      "partB": "right_middle_wheel",
+      "datumB": "axle",
+      "offset": 0.0,
+      "angle": 0.0,
+      "limits": null
+    },
+    {
+      "id": "right_rear_axle",
+      "kind": "revolute",
+      "partA": "right_bogie",
+      "datumA": "rear_axle",
+      "partB": "right_rear_wheel",
+      "datumB": "axle",
+      "offset": 0.0,
+      "angle": 0.0,
+      "limits": null
+    }
+  ],
+  "joints": [
+    {
+      "id": "left_rocker_pivot",
+      "kind": "revolute",
+      "value": 0.13962634015954636,
+      "unit": "radian",
+      "minimum": -0.3141592653589793,
+      "maximum": 0.3141592653589793
+    },
+    {
+      "id": "right_rocker_pivot",
+      "kind": "revolute",
+      "value": -0.13962634015954636,
+      "unit": "radian",
+      "minimum": -0.3141592653589793,
+      "maximum": 0.3141592653589793
+    },
+    {
+      "id": "left_bogie_pivot",
+      "kind": "revolute",
+      "value": 0.0,
+      "unit": "radian",
+      "minimum": -0.6108652381980153,
+      "maximum": 0.6632251157578453
+    },
+    {
+      "id": "right_bogie_pivot",
+      "kind": "revolute",
+      "value": 0.0,
+      "unit": "radian",
+      "minimum": -0.6108652381980153,
+      "maximum": 0.6632251157578453
+    },
+    {
+      "id": "left_front_axle",
+      "kind": "revolute",
+      "value": 0.0,
+      "unit": "radian",
+      "minimum": null,
+      "maximum": null
+    },
+    {
+      "id": "left_middle_axle",
+      "kind": "revolute",
+      "value": 0.0,
+      "unit": "radian",
+      "minimum": null,
+      "maximum": null
+    },
+    {
+      "id": "left_rear_axle",
+      "kind": "revolute",
+      "value": 0.0,
+      "unit": "radian",
+      "minimum": null,
+      "maximum": null
+    },
+    {
+      "id": "right_front_axle",
+      "kind": "revolute",
+      "value": 0.0,
+      "unit": "radian",
+      "minimum": null,
+      "maximum": null
+    },
+    {
+      "id": "right_middle_axle",
+      "kind": "revolute",
+      "value": 0.0,
+      "unit": "radian",
+      "minimum": null,
+      "maximum": null
+    },
+    {
+      "id": "right_rear_axle",
+      "kind": "revolute",
+      "value": 0.0,
+      "unit": "radian",
+      "minimum": null,
+      "maximum": null
+    }
+  ],
+  "bom": {
+    "items": [
+      {
+        "item": 1,
+        "componentId": "chassis-proxy",
+        "partNumber": null,
+        "revision": "A",
+        "description": "Chassis tub",
+        "disposition": "make",
+        "quantity": 1,
+        "unit": "each"
+      },
+      {
+        "item": 2,
+        "componentId": "rocker-proxy",
+        "partNumber": null,
+        "revision": "A",
+        "description": "Rocker link",
+        "disposition": "make",
+        "quantity": 2,
+        "unit": "each"
+      },
+      {
+        "item": 3,
+        "componentId": "bogie-proxy",
+        "partNumber": null,
+        "revision": "A",
+        "description": "Bogie link",
+        "disposition": "make",
+        "quantity": 2,
+        "unit": "each"
+      },
+      {
+        "item": 4,
+        "componentId": "wheel-proxy",
+        "partNumber": null,
+        "revision": "A",
+        "description": "Wheel and hub",
+        "disposition": "make",
+        "quantity": 6,
+        "unit": "each"
+      }
+    ]
+  },
+  "materials": {
+    "petg": {
+      "source": {
+        "type": "custom",
+        "custom": {
+          "notes": "PET-G prototype"
+        }
+      },
+      "visual": {
+        "color": [
+          0.16,
+          0.58,
+          0.69
+        ],
+        "metallic": 0.0,
+        "roughness": 0.55
+      }
+    }
+  },
+  "selection": [
+    "left_rocker"
+  ],
+  "validation": {
+    "valid": true,
+    "errors": [],
+    "warnings": [
+      {
+        "code": "package_warning",
+        "message": "material 'petg' has no physical properties defined",
+        "entityIds": []
+      }
+    ]
+  }
+}
