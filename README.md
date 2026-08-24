@@ -7,14 +7,17 @@ The application is deliberately agent-runtime-neutral. Humans use the web
 interface, scripts use the REST API, and agents use an MCP adapter; all three
 operate the same versioned package-session service.
 
-This repository is in its architecture and contract-bootstrap phase. The
-initial source of UI concepts is yapCAD's historical
+This repository contains the architecture, protocol contracts, and first
+read-only package-session application slice. The initial source of UI concepts
+is yapCAD's historical
 `feature/workbench-v2` branch, but code will be migrated by capability rather
 than by merging that branch.
 
 ## Principles
 
 - Analytic BREP in `yapcad-geometry-json-v0.2` remains authoritative.
+- Product-definition packages are validated by yapCAD before a revision-zero
+  semantic snapshot is created.
 - Browsers receive derived render meshes, not authoritative CAD state.
 - Every state change uses an expected revision and produces an event.
 - REST, WebSocket, and MCP are adapters over one domain service.
@@ -27,12 +30,19 @@ See [the architecture](docs/architecture.md) and
 ## Contract tests
 
 ```bash
+python -m pip install -e ../yapCAD  # until yapCAD 1.1 is released
 python -m pip install -e '.[test]'
 pytest
 ```
 
-The schemas in `contracts/` are an early v1 contract and will evolve through
-review before implementation begins.
+For an installed yapCAD 1.1 release, install `.[backend,test]` to include both
+the viewer backend integration and test dependencies. The package-session
+integration test generates a real v0.2 package when a compatible yapCAD is
+present; transport-only CI can still run the contract and application tests
+without OCC.
+
+The schemas in `contracts/` define the transport-neutral v1 application
+boundary and evolve under executable contract tests.
 
 ## License
 

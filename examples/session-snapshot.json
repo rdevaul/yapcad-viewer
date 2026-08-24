@@ -8,6 +8,38 @@
     "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
     "rootPartId": "chassis"
   },
+  "components": [
+    {
+      "id": "chassis-tub",
+      "name": "Chassis tub",
+      "description": "Printed rover chassis",
+      "disposition": "make",
+      "quantityPerInstance": 1,
+      "unit": "each",
+      "partNumber": "YR-CHASSIS-001",
+      "revision": "A",
+      "materialId": "petg",
+      "manufacturing": {"process": "FDM"},
+      "procurement": null,
+      "pmi": null,
+      "assetDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    {
+      "id": "rocker-assembly",
+      "name": "Rocker assembly",
+      "description": "Printed suspension rocker",
+      "disposition": "make",
+      "quantityPerInstance": 1,
+      "unit": "each",
+      "partNumber": "YR-ROCKER-001",
+      "revision": "A",
+      "materialId": "petg",
+      "manufacturing": {"process": "FDM"},
+      "procurement": null,
+      "pmi": null,
+      "assetDigest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    }
+  ],
   "parts": [
     {
       "id": "chassis",
@@ -17,6 +49,7 @@
       "materialId": "petg",
       "assetDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "transform": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+      "datums": [{"id": "left_pivot", "kind": "axis", "origin": [0, 155, 140], "direction": [0, 1, 0]}],
       "visible": true
     },
     {
@@ -27,7 +60,21 @@
       "materialId": "petg",
       "assetDigest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
       "transform": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 155, 140, 1],
+      "datums": [{"id": "pivot", "kind": "axis", "origin": [0, 0, 0], "direction": [0, 1, 0]}],
       "visible": true
+    }
+  ],
+  "mates": [
+    {
+      "id": "left_rocker_pivot",
+      "kind": "revolute",
+      "partA": "chassis",
+      "datumA": "left_pivot",
+      "partB": "left_rocker",
+      "datumB": "pivot",
+      "offset": 0.0,
+      "angle": 0.0,
+      "limits": {"min_value": -0.3141592653589793, "max_value": 0.3141592653589793}
     }
   ],
   "joints": [
@@ -40,6 +87,15 @@
       "maximum": 0.3141592653589793
     }
   ],
+  "bom": {
+    "items": [
+      {"item": 1, "componentId": "chassis-tub", "partNumber": "YR-CHASSIS-001", "revision": "A", "description": "Chassis tub", "disposition": "make", "quantity": 1, "unit": "each"},
+      {"item": 2, "componentId": "rocker-assembly", "partNumber": "YR-ROCKER-001", "revision": "A", "description": "Rocker assembly", "disposition": "make", "quantity": 1, "unit": "each"}
+    ]
+  },
+  "materials": {
+    "petg": {"source": {"type": "custom"}, "visual": {"color": [0.6, 0.85, 1.0]}}
+  },
   "selection": ["left_rocker"],
   "validation": {"valid": true, "errors": [], "warnings": []}
 }

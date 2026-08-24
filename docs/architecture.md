@@ -105,6 +105,17 @@ A `PackageSession` is the sole mutable aggregate in v1. It contains:
 - Derived mesh assets keyed by geometry digest and tessellation parameters.
 - A monotonically increasing integer revision.
 
+The session snapshot preserves product semantics as distinct collections:
+component definitions describe make/buy/raw-stock/consumable identity, parts
+describe positioned instances and their datums, mates preserve assembly
+constraints, joints expose poseable scalar values, and the BOM retains its
+component references. Transform arrays are column-major homogeneous 4x4
+matrices so they can be consumed directly by the Three.js client.
+
+The first implementation accepts unpacked `.ycpkg` directories using
+`ycpkg-spec-v0.2`. Archive ingestion and legacy v0.1 flattening are explicit
+later compatibility tasks; neither is guessed at during package opening.
+
 Every state-changing command carries `expectedRevision`. A command succeeds
 only when it matches the current session revision. Success increments the
 revision exactly once and publishes an event containing the command ID and
