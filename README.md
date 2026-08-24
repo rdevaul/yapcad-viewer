@@ -7,9 +7,9 @@ The application is deliberately agent-runtime-neutral. Humans use the web
 interface, scripts use the REST API, and agents use an MCP adapter; all three
 operate the same versioned package-session service.
 
-This repository contains the architecture, protocol contracts, and first
-read-only package-session application slice. The initial source of UI concepts
-is yapCAD's historical
+This repository contains the architecture, protocol contracts, read-only
+package-session application service, and browser workbench. The initial source
+of UI concepts is yapCAD's historical
 `feature/workbench-v2` branch, but code will be migrated by capability rather
 than by merging that branch.
 
@@ -28,6 +28,28 @@ than by merging that branch.
 
 See [the architecture](docs/architecture.md) and
 [legacy extraction audit](docs/legacy-extraction.md).
+
+## Browser workbench
+
+The application in `web/` loads the versioned session and derived-scene
+contracts directly. Its first inspection slice provides a semantic assembly
+tree, part and package inspectors, disposition visibility groups, selectable
+3D instances, fit and standard cameras, lighting modes, solid/wireframe/X-ray
+rendering, and normalized section planes.
+
+A deterministic 11-instance YapRover suspension scene is committed as the
+offline demo. The fixture is derived from the standalone YapRover DSL using an
+OpenCASCADE-enabled yapCAD environment, while the browser receives only
+content-addressed GLB render assets and semantic JSON snapshots.
+
+```bash
+cd web
+npm ci
+npm run dev
+```
+
+See [the web application guide](web/README.md) for backend connection and
+fixture-regeneration details.
 
 ## Contract tests
 
