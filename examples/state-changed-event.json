@@ -1,0 +1,13 @@
+{
+  "schema": "yapcad-viewer-event-v1",
+  "eventId": "66666666-6666-4666-8666-666666666666",
+  "sessionId": "44444444-4444-4444-8444-444444444444",
+  "revision": 4,
+  "type": "session.state_changed",
+  "timestamp": "2026-08-23T22:00:00Z",
+  "commandId": "55555555-5555-4555-8555-555555555555",
+  "payload": {
+    "operation": "set_pose",
+    "changedPartIds": ["left_rocker"]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "schema": "yapcad-viewer-command-v1",
+  "commandId": "55555555-5555-4555-8555-555555555555",
+  "sessionId": "44444444-4444-4444-8444-444444444444",
+  "expectedRevision": 3,
+  "operation": "set_pose",
+  "arguments": {
+    "jointValues": {
+      "left_rocker_pivot": 0.20943951023931956
+    }
+  }
+}

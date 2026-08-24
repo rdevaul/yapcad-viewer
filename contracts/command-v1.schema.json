@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yapcad.org/schemas/viewer/command-v1.schema.json",
+  "title": "yapcad-viewer command v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "commandId", "sessionId", "expectedRevision", "operation", "arguments"],
+  "properties": {
+    "schema": {"const": "yapcad-viewer-command-v1"},
+    "commandId": {"type": "string", "format": "uuid"},
+    "sessionId": {"type": "string", "format": "uuid"},
+    "expectedRevision": {"type": "integer", "minimum": 0},
+    "operation": {
+      "enum": [
+        "set_selection",
+        "set_visibility",
+        "set_pose",
+        "set_view"
+      ]
+    },
+    "arguments": {"type": "object"}
+  },
+  "$defs": {
+    "partIds": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "vec3": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {"type": "number"}
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"operation": {"const": "set_selection"}}},
+      "then": {
+        "properties": {
+          "arguments": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["partIds", "mode"],
+            "properties": {
+              "partIds": {"$ref": "#/$defs/partIds"},
+              "mode": {"enum": ["replace", "add", "remove"]}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"operation": {"const": "set_visibility"}}},
+      "then": {
+        "properties": {
+          "arguments": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["partIds", "visible"],
+            "properties": {
+              "partIds": {"$ref": "#/$defs/partIds"},
+              "visible": {"type": "boolean"}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"operation": {"const": "set_pose"}}},
+      "then": {
+        "properties": {
+          "arguments": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["jointValues"],
+            "properties": {
+              "jointValues": {
+                "type": "object",
+                "minProperties": 1,
+                "additionalProperties": {"type": "number"}
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"operation": {"const": "set_view"}}},
+      "then": {
+        "properties": {
+          "arguments": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["projection", "position", "target", "up"],
+            "properties": {
+              "projection": {"enum": ["perspective", "orthographic"]},
+              "position": {"$ref": "#/$defs/vec3"},
+              "target": {"$ref": "#/$defs/vec3"},
+              "up": {"$ref": "#/$defs/vec3"}
+            }
+          }
+        }
+      }
+    }
+  ]
+}

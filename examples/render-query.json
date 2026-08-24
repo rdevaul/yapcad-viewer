@@ -1,0 +1,13 @@
+{
+  "schema": "yapcad-viewer-query-v1",
+  "queryId": "77777777-7777-4777-8777-777777777777",
+  "sessionId": "44444444-4444-4444-8444-444444444444",
+  "atRevision": 4,
+  "operation": "request_render",
+  "arguments": {
+    "width": 1600,
+    "height": 1200,
+    "format": "png",
+    "transparent": false
+  }
+}

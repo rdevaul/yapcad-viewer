@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yapcad-viewer-contracts"
+version = "0.1.0"
+description = "Contracts and architecture for the yapCAD package viewer"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [
+  { name = "Richard DeVaul", email = "richard.devaul@gmail.com" },
+]
+
+[project.optional-dependencies]
+test = [
+  "jsonschema>=4.23",
+  "pytest>=8",
+]
+
+[tool.setuptools]
+py-modules = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

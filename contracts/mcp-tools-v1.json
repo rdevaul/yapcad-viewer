@@ -1,0 +1,124 @@
+{
+  "schema": "yapcad-viewer-mcp-tools-v1",
+  "tools": [
+    {
+      "name": "viewer_open_package",
+      "description": "Open and validate a yapCAD package, returning a session snapshot.",
+      "readOnlyHint": false,
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["package_uri"],
+        "properties": {
+          "package_uri": {"type": "string", "minLength": 1},
+          "strict": {"type": "boolean", "default": true}
+        }
+      }
+    },
+    {
+      "name": "viewer_get_snapshot",
+      "description": "Return semantic package and presentation state for a session.",
+      "readOnlyHint": true,
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["session_id"],
+        "properties": {"session_id": {"type": "string", "format": "uuid"}}
+      }
+    },
+    {
+      "name": "viewer_set_selection",
+      "description": "Select stable part IDs using optimistic concurrency.",
+      "readOnlyHint": false,
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["session_id", "expected_revision", "part_ids", "mode"],
+        "properties": {
+          "session_id": {"type": "string", "format": "uuid"},
+          "expected_revision": {"type": "integer", "minimum": 0},
+          "part_ids": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true},
+          "mode": {"enum": ["replace", "add", "remove"]}
+        }
+      }
+    },
+    {
+      "name": "viewer_set_visibility",
+      "description": "Show or hide stable part IDs using optimistic concurrency.",
+      "readOnlyHint": false,
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["session_id", "expected_revision", "part_ids", "visible"],
+        "properties": {
+          "session_id": {"type": "string", "format": "uuid"},
+          "expected_revision": {"type": "integer", "minimum": 0},
+          "part_ids": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true},
+          "visible": {"type": "boolean"}
+        }
+      }
+    },
+    {
+      "name": "viewer_set_pose",
+      "description": "Set named assembly joint values in radians or millimetres.",
+      "readOnlyHint": false,
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["session_id", "expected_revision", "joint_values"],
+        "properties": {
+          "session_id": {"type": "string", "format": "uuid"},
+          "expected_revision": {"type": "integer", "minimum": 0},
+          "joint_values": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "number"}}
+        }
+      }
+    },
+    {
+      "name": "viewer_measure_distance",
+      "description": "Measure minimum analytic distance between two semantic targets.",
+      "readOnlyHint": true,
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["session_id", "at_revision", "target_a", "target_b"],
+        "properties": {
+          "session_id": {"type": "string", "format": "uuid"},
+          "at_revision": {"type": "integer", "minimum": 0},
+          "target_a": {"type": "string", "minLength": 1},
+          "target_b": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    {
+      "name": "viewer_render",
+      "description": "Render the current session view and return an image resource.",
+      "readOnlyHint": true,
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["session_id", "at_revision", "width", "height"],
+        "properties": {
+          "session_id": {"type": "string", "format": "uuid"},
+          "at_revision": {"type": "integer", "minimum": 0},
+          "width": {"type": "integer", "minimum": 64, "maximum": 8192},
+          "height": {"type": "integer", "minimum": 64, "maximum": 8192},
+          "format": {"enum": ["png", "jpeg"], "default": "png"}
+        }
+      }
+    },
+    {
+      "name": "viewer_close_session",
+      "description": "Close a viewer session and release its derived caches.",
+      "readOnlyHint": false,
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["session_id", "expected_revision"],
+        "properties": {
+          "session_id": {"type": "string", "format": "uuid"},
+          "expected_revision": {"type": "integer", "minimum": 0}
+        }
+      }
+    }
+  ]
+}

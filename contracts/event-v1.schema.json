@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yapcad.org/schemas/viewer/event-v1.schema.json",
+  "title": "yapcad-viewer event v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "eventId", "sessionId", "revision", "type", "timestamp", "payload"],
+  "properties": {
+    "schema": {"const": "yapcad-viewer-event-v1"},
+    "eventId": {"type": "string", "format": "uuid"},
+    "sessionId": {"type": "string", "format": "uuid"},
+    "revision": {"type": "integer", "minimum": 0},
+    "type": {
+      "enum": [
+        "session.opened",
+        "session.state_changed",
+        "session.conflict",
+        "job.started",
+        "job.progress",
+        "job.completed",
+        "job.failed",
+        "session.closed"
+      ]
+    },
+    "timestamp": {"type": "string", "format": "date-time"},
+    "commandId": {"type": ["string", "null"], "format": "uuid"},
+    "payload": {"type": "object"}
+  }
+}

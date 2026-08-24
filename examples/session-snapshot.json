@@ -1,0 +1,45 @@
+{
+  "schema": "yapcad-viewer-session-v1",
+  "sessionId": "44444444-4444-4444-8444-444444444444",
+  "revision": 3,
+  "package": {
+    "name": "YapRover prototype",
+    "version": "0.1.0",
+    "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "rootPartId": "chassis"
+  },
+  "parts": [
+    {
+      "id": "chassis",
+      "name": "Chassis",
+      "componentId": "chassis-tub",
+      "parentId": null,
+      "materialId": "petg",
+      "assetDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "transform": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+      "visible": true
+    },
+    {
+      "id": "left_rocker",
+      "name": "Left rocker",
+      "componentId": "rocker-assembly",
+      "parentId": "chassis",
+      "materialId": "petg",
+      "assetDigest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "transform": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 155, 140, 1],
+      "visible": true
+    }
+  ],
+  "joints": [
+    {
+      "id": "left_rocker_pivot",
+      "kind": "revolute",
+      "value": 0.0,
+      "unit": "radian",
+      "minimum": -0.3141592653589793,
+      "maximum": 0.3141592653589793
+    }
+  ],
+  "selection": ["left_rocker"],
+  "validation": {"valid": true, "errors": [], "warnings": []}
+}

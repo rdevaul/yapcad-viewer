@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yapcad.org/schemas/viewer/session-v1.schema.json",
+  "title": "yapcad-viewer session snapshot v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "sessionId",
+    "revision",
+    "package",
+    "parts",
+    "joints",
+    "selection",
+    "validation"
+  ],
+  "properties": {
+    "schema": {"const": "yapcad-viewer-session-v1"},
+    "sessionId": {"type": "string", "format": "uuid"},
+    "revision": {"type": "integer", "minimum": 0},
+    "package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "digest"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "minLength": 1},
+        "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "rootPartId": {"type": ["string", "null"]}
+      }
+    },
+    "parts": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/part"}
+    },
+    "joints": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/joint"}
+    },
+    "selection": {
+      "type": "array",
+      "items": {"type": "string"},
+      "uniqueItems": true
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["valid", "errors", "warnings"],
+      "properties": {
+        "valid": {"type": "boolean"},
+        "errors": {"type": "array", "items": {"$ref": "#/$defs/diagnostic"}},
+        "warnings": {"type": "array", "items": {"$ref": "#/$defs/diagnostic"}}
+      }
+    }
+  },
+  "$defs": {
+    "matrix4": {
+      "type": "array",
+      "minItems": 16,
+      "maxItems": 16,
+      "items": {"type": "number"}
+    },
+    "part": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "componentId", "transform", "visible"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "componentId": {"type": "string", "minLength": 1},
+        "parentId": {"type": ["string", "null"]},
+        "materialId": {"type": ["string", "null"]},
+        "assetDigest": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+        "transform": {"$ref": "#/$defs/matrix4"},
+        "visible": {"type": "boolean"}
+      }
+    },
+    "joint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "value", "unit"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "kind": {"type": "string", "minLength": 1},
+        "value": {"type": "number"},
+        "unit": {"enum": ["radian", "millimetre"]},
+        "minimum": {"type": ["number", "null"]},
+        "maximum": {"type": ["number", "null"]}
+      }
+    },
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": {
+        "code": {"type": "string", "minLength": 1},
+        "message": {"type": "string", "minLength": 1},
+        "entityIds": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yapcad.org/schemas/viewer/query-v1.schema.json",
+  "title": "yapcad-viewer revision-pinned query v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "queryId", "sessionId", "atRevision", "operation", "arguments"],
+  "properties": {
+    "schema": {"const": "yapcad-viewer-query-v1"},
+    "queryId": {"type": "string", "format": "uuid"},
+    "sessionId": {"type": "string", "format": "uuid"},
+    "atRevision": {"type": "integer", "minimum": 0},
+    "operation": {"enum": ["measure_distance", "request_render"]},
+    "arguments": {"type": "object"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"operation": {"const": "measure_distance"}}},
+      "then": {
+        "properties": {
+          "arguments": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["targetA", "targetB"],
+            "properties": {
+              "targetA": {"type": "string", "minLength": 1},
+              "targetB": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"operation": {"const": "request_render"}}},
+      "then": {
+        "properties": {
+          "arguments": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["width", "height", "format"],
+            "properties": {
+              "width": {"type": "integer", "minimum": 64, "maximum": 8192},
+              "height": {"type": "integer", "minimum": 64, "maximum": 8192},
+              "format": {"enum": ["png", "jpeg"]},
+              "transparent": {"type": "boolean", "default": false}
+            }
+          }
+        }
+      }
+    }
+  ]
+}
