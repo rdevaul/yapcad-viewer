@@ -3,9 +3,9 @@ requires = ["setuptools>=69", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "yapcad-viewer-contracts"
+name = "yapcad-viewer"
 version = "0.1.0"
-description = "Contracts and architecture for the yapCAD package viewer"
+description = "API-first viewer and inspection service for yapCAD packages"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
@@ -14,13 +14,19 @@ authors = [
 ]
 
 [project.optional-dependencies]
+backend = [
+  "yapCAD>=1.1.0",
+]
 test = [
   "jsonschema>=4.23",
   "pytest>=8",
 ]
 
-[tool.setuptools]
-py-modules = []
+[tool.setuptools.packages.find]
+where = ["backend"]
+
+[tool.setuptools.package-dir]
+"" = "backend"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
