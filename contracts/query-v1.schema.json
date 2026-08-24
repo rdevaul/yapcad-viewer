@@ -10,10 +10,25 @@
     "queryId": {"type": "string", "format": "uuid"},
     "sessionId": {"type": "string", "format": "uuid"},
     "atRevision": {"type": "integer", "minimum": 0},
-    "operation": {"enum": ["measure_distance", "request_render"]},
+    "operation": {"enum": ["get_scene", "measure_distance", "request_render"]},
     "arguments": {"type": "object"}
   },
   "allOf": [
+    {
+      "if": {"properties": {"operation": {"const": "get_scene"}}},
+      "then": {
+        "properties": {
+          "arguments": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "linearDeflectionMm": {"type": "number", "exclusiveMinimum": 0, "default": 0.25},
+              "angularDeflectionRad": {"type": "number", "exclusiveMinimum": 0, "default": 0.5}
+            }
+          }
+        }
+      }
+    },
     {
       "if": {"properties": {"operation": {"const": "measure_distance"}}},
       "then": {

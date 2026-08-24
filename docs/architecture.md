@@ -146,9 +146,14 @@ as a compact polyline document or SVG with the same semantic identity rules.
 Mesh cache keys include:
 
 - Authoritative geometry digest.
-- Instance transform policy.
+- Stable component ID and the local-component transform policy.
 - Linear and angular tessellation tolerances.
-- yapCAD and OCC versions.
+- Viewer exporter version plus yapCAD and OCC versions.
+
+The derivation digest covers those inputs and enables a cache lookup before
+tessellation. The public asset ID is independently computed from the finished
+GLB bytes. Instances of one component share an asset; their transforms remain
+in the scene snapshot rather than being baked into duplicated meshes.
 
 ## Application commands
 
@@ -177,6 +182,7 @@ The proposed v1 surface is intentionally small:
 |---|---|---|
 | `POST` | `/v1/sessions` | Upload or open an allowed package URI |
 | `GET` | `/v1/sessions/{id}` | Retrieve the current semantic snapshot |
+| `GET` | `/v1/sessions/{id}/scene` | Retrieve a revision-pinned derived scene |
 | `DELETE` | `/v1/sessions/{id}` | Close a session and release caches |
 | `POST` | `/v1/sessions/{id}/commands` | Execute a revision-checked command |
 | `POST` | `/v1/sessions/{id}/queries` | Execute a read-only revision-pinned query |

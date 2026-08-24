@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yapcad.org/schemas/viewer/scene-v1.schema.json",
+  "title": "yapcad-viewer derived scene v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "sessionId", "revision", "digest", "units", "assets", "nodes", "diagnostics"],
+  "properties": {
+    "schema": {"const": "yapcad-viewer-scene-v1"},
+    "sessionId": {"type": "string", "format": "uuid"},
+    "revision": {"type": "integer", "minimum": 0},
+    "digest": {"$ref": "#/$defs/digest"},
+    "units": {"const": "millimetre"},
+    "assets": {"type": "array", "items": {"$ref": "#/$defs/asset"}},
+    "nodes": {"type": "array", "items": {"$ref": "#/$defs/node"}},
+    "diagnostics": {"type": "array", "items": {"$ref": "#/$defs/diagnostic"}}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "matrix4": {"type": "array", "minItems": 16, "maxItems": 16, "items": {"type": "number"}},
+    "asset": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "componentId", "mediaType", "byteLength", "sourceRepresentation", "derivationDigest", "generatorFingerprint", "tessellation"],
+      "properties": {
+        "id": {"$ref": "#/$defs/digest"},
+        "componentId": {"type": "string", "minLength": 1},
+        "mediaType": {"const": "model/gltf-binary"},
+        "byteLength": {"type": "integer", "minimum": 1},
+        "sourceRepresentation": {"enum": ["brep", "embedded-mesh"]},
+        "derivationDigest": {"$ref": "#/$defs/digest"},
+        "generatorFingerprint": {"type": "string", "minLength": 1},
+        "tessellation": {
+          "type": "object", "additionalProperties": false,
+          "required": ["linearDeflectionMm", "angularDeflectionRad"],
+          "properties": {
+            "linearDeflectionMm": {"type": "number", "exclusiveMinimum": 0},
+            "angularDeflectionRad": {"type": "number", "exclusiveMinimum": 0}
+          }
+        }
+      }
+    },
+    "node": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "name", "componentId", "parentId", "materialId", "assetId", "transform", "visible"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "componentId": {"type": "string", "minLength": 1},
+        "parentId": {"type": ["string", "null"]},
+        "materialId": {"type": ["string", "null"]},
+        "assetId": {"anyOf": [{"$ref": "#/$defs/digest"}, {"type": "null"}]},
+        "transform": {"$ref": "#/$defs/matrix4"},
+        "visible": {"type": "boolean"}
+      }
+    },
+    "diagnostic": {
+      "type": "object", "additionalProperties": false,
+      "required": ["code", "message", "entityIds"],
+      "properties": {
+        "code": {"type": "string", "minLength": 1},
+        "message": {"type": "string", "minLength": 1},
+        "entityIds": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}

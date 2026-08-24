@@ -1,0 +1,35 @@
+{
+  "schema": "yapcad-viewer-scene-v1",
+  "sessionId": "44444444-4444-4444-8444-444444444444",
+  "revision": 3,
+  "digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  "units": "millimetre",
+  "assets": [
+    {
+      "id": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "componentId": "rocker-assembly",
+      "mediaType": "model/gltf-binary",
+      "byteLength": 16384,
+      "sourceRepresentation": "brep",
+      "derivationDigest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "generatorFingerprint": "yapcad:1.1.0;occ:7.7.2",
+      "tessellation": {
+        "linearDeflectionMm": 0.25,
+        "angularDeflectionRad": 0.5
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "left_rocker",
+      "name": "Left rocker",
+      "componentId": "rocker-assembly",
+      "parentId": "chassis",
+      "materialId": "petg",
+      "assetId": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "transform": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 155, 140, 1],
+      "visible": true
+    }
+  ],
+  "diagnostics": []
+}

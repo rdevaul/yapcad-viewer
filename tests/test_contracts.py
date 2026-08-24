@@ -38,6 +38,12 @@ def test_session_snapshot_example_validates():
     )
 
 
+def test_scene_snapshot_example_validates():
+    _validator("scene-v1.schema.json").validate(
+        _load(EXAMPLES / "scene-snapshot.json")
+    )
+
+
 def test_pose_command_example_validates():
     _validator("command-v1.schema.json").validate(
         _load(EXAMPLES / "set-pose-command.json")
@@ -74,7 +80,9 @@ def test_mcp_tool_names_are_unique_and_mutations_are_revision_checked():
         if not tool["readOnlyHint"] and tool["name"] not in exempt:
             assert "expected_revision" in tool["inputSchema"]["required"]
 
-    revision_pinned_queries = {"viewer_measure_distance", "viewer_render"}
+    revision_pinned_queries = {
+        "viewer_get_scene", "viewer_measure_distance", "viewer_render",
+    }
     for tool in tools:
         if tool["name"] in revision_pinned_queries:
             assert tool["readOnlyHint"] is True

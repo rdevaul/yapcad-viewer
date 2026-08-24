@@ -90,6 +90,22 @@
       }
     },
     {
+      "name": "viewer_get_scene",
+      "description": "Return a revision-pinned semantic scene and content-addressed GLB asset IDs.",
+      "readOnlyHint": true,
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["session_id", "at_revision"],
+        "properties": {
+          "session_id": {"type": "string", "format": "uuid"},
+          "at_revision": {"type": "integer", "minimum": 0},
+          "linear_deflection_mm": {"type": "number", "exclusiveMinimum": 0, "default": 0.25},
+          "angular_deflection_rad": {"type": "number", "exclusiveMinimum": 0, "default": 0.5}
+        }
+      }
+    },
+    {
       "name": "viewer_render",
       "description": "Render the current session view and return an image resource.",
       "readOnlyHint": true,

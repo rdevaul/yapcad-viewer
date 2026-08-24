@@ -5,6 +5,7 @@ from .package_session import (
     PackageSessionError,
     PackageSessionService,
     PackageSourcePolicy,
+    SessionRenderSource,
     YapcadPackageAdapter,
 )
 
@@ -13,5 +14,6 @@ __all__ = [
     "PackageSessionError",
     "PackageSessionService",
     "PackageSourcePolicy",
+    "SessionRenderSource",
     "YapcadPackageAdapter",
 ]
