@@ -18,6 +18,8 @@ than by merging that branch.
 - Analytic BREP in `yapcad-geometry-json-v0.2` remains authoritative.
 - Product-definition packages are validated by yapCAD before a revision-zero
   semantic snapshot is created.
+- Render meshes are deterministic, content-addressed GLB derivatives; repeated
+  component instances share assets while retaining independent transforms.
 - Browsers receive derived render meshes, not authoritative CAD state.
 - Every state change uses an expected revision and produces an event.
 - REST, WebSocket, and MCP are adapters over one domain service.

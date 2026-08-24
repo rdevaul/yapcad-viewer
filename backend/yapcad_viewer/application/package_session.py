@@ -149,6 +149,14 @@ class _PackageSession:
     snapshot: dict[str, Any]
 
 
+@dataclass(frozen=True)
+class SessionRenderSource:
+    """Internal application handoff for derived rendering services."""
+
+    package_root: Path
+    snapshot: dict[str, Any]
+
+
 class PackageSessionService:
     """Own open read-only package sessions without exposing mutable internals."""
 
@@ -172,6 +180,19 @@ class PackageSessionService:
     def get_snapshot(self, session_id: UUID | str) -> dict[str, Any]:
         session = self._get(session_id)
         return copy.deepcopy(session.snapshot)
+
+    def get_render_source(
+        self, session_id: UUID | str, *, at_revision: int,
+    ) -> SessionRenderSource:
+        """Return a revision-pinned source without exposing session mutation."""
+        session = self._get(session_id)
+        current = session.snapshot["revision"]
+        if at_revision != current:
+            raise PackageSessionError(
+                "revision_conflict",
+                f"requested revision {at_revision}, current revision is {current}",
+            )
+        return SessionRenderSource(session.package_root, copy.deepcopy(session.snapshot))
 
     def close_session(self, session_id: UUID | str, *, expected_revision: int = 0) -> None:
         session = self._get(session_id)
