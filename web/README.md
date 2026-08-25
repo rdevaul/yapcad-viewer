@@ -12,7 +12,8 @@ with `?session=<session-id>&revision=<revision>`.
 
 ## Development
 
-Requires Node.js 22.13 or newer.
+Requires Node.js 22.13 or newer. CI exercises both Node.js 22 and the current
+Node.js 24 LTS line; its Node 24 lane also rejects high-severity npm advisories.
 
 ```bash
 npm ci
@@ -25,6 +26,7 @@ Useful checks:
 npm run typecheck
 npm run lint
 npm test
+npm audit --audit-level=high
 ```
 
 `npm run generate:contracts` regenerates the TypeScript boundary from the
