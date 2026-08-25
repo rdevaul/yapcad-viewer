@@ -7,6 +7,11 @@ The application is deliberately agent-runtime-neutral. Humans use the web
 interface, scripts use the REST API, and agents use an MCP adapter; all three
 operate the same versioned package-session service.
 
+For a local visual inspection, the browser workbench can also open an unpacked
+`.ycpkg` directory directly. This explicit local-preview path derives GLB data
+from the package's embedded display meshes; the Python package-session path
+remains the authority for strict validation and BREP tessellation.
+
 This repository contains the architecture, protocol contracts, read-only
 package-session application service, and browser workbench. The initial source
 of UI concepts is yapCAD's historical

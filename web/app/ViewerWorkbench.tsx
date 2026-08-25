@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { YapcadViewerDerivedSceneV1 } from "@/src/contracts/scene-v1";
 import type {
   Component,
@@ -14,7 +14,8 @@ import {
   shortDigest,
   type Disposition,
 } from "@/src/lib/semantics";
-import { createViewerApi } from "@/src/lib/viewer-api";
+import { LocalPackageApi } from "@/src/lib/local-package-api";
+import { createViewerApi, type ViewerApi } from "@/src/lib/viewer-api";
 import type {
   SceneViewer,
   ClipAxis,
@@ -37,7 +38,9 @@ const defaultClipping: ClipState = {
 
 export function ViewerWorkbench() {
   const viewportRef = useRef<HTMLDivElement>(null);
+  const packageInputRef = useRef<HTMLInputElement>(null);
   const viewerRef = useRef<SceneViewer | null>(null);
+  const activeLoadRef = useRef(0);
   const [loadState, setLoadState] = useState<LoadState>("loading");
   const [loadMessage, setLoadMessage] = useState("Opening engineering package…");
   const [session, setSession] = useState<YapcadViewerSessionSnapshotV1 | null>(null);
@@ -54,42 +57,76 @@ export function ViewerWorkbench() {
     consumable: true,
   });
 
+  const loadApi = useCallback(async (api: ViewerApi, openingMessage: string) => {
+    const viewer = viewerRef.current;
+    if (!viewer) throw new Error("Viewport is not ready");
+    const loadId = ++activeLoadRef.current;
+    setLoadState("loading");
+    setLoadMessage(openingMessage);
+    const initial = await api.loadInitial();
+    if (loadId !== activeLoadRef.current) return;
+    setLoadMessage("Preparing semantic scene…");
+    await viewer.load(initial.session, initial.scene, api);
+    if (loadId !== activeLoadRef.current) return;
+    setSession(initial.session);
+    setScene(initial.scene);
+    const initialSelection = initial.session.selection[0] ?? null;
+    setSelectedPartId(initialSelection);
+    viewer.setSelected(initialSelection);
+    viewer.setRenderMode("solid");
+    viewer.setLighting("studio");
+    (Object.keys(defaultClipping) as ClipAxis[]).forEach((axis) =>
+      viewer.setClipPlane(axis, false, 0.5, false));
+    setRenderMode("solid");
+    setLighting("studio");
+    setClipping(defaultClipping);
+    setShowClipping(false);
+    setVisibleGroups({ make: true, buy: true, raw_stock: true, consumable: true });
+    setLoadState("ready");
+  }, []);
+
+  const showLoadError = useCallback((error: unknown) => {
+    setLoadState("error");
+    setLoadMessage(error instanceof Error ? error.message : "Unable to open scene");
+  }, []);
+
   useEffect(() => {
     if (!viewportRef.current) return;
     const container = viewportRef.current;
     let viewer: SceneViewer | null = null;
     let active = true;
-    const api = createViewerApi(window.location.search);
     import("@/src/viewer/SceneViewer")
       .then(({ SceneViewer: Viewer }) => {
         if (!active) return null;
         viewer = new Viewer(container, { onSelect: setSelectedPartId });
         viewerRef.current = viewer;
-        return api.loadInitial();
-      })
-      .then(async (initial) => {
-        if (!active || !initial || !viewer) return;
-        setLoadMessage("Tessellating semantic scene…");
-        await viewer.load(initial.session, initial.scene, api);
-        if (!active) return;
-        setSession(initial.session);
-        setScene(initial.scene);
-        const initialSelection = initial.session.selection[0] ?? null;
-        setSelectedPartId(initialSelection);
-        viewer.setSelected(initialSelection);
-        setLoadState("ready");
+        return loadApi(createViewerApi(window.location.search), "Opening engineering package…");
       })
       .catch((error: unknown) => {
         if (!active) return;
-        setLoadState("error");
-        setLoadMessage(error instanceof Error ? error.message : "Unable to open scene");
+        showLoadError(error);
       });
     return () => {
       active = false;
+      activeLoadRef.current += 1;
       viewer?.dispose();
       viewerRef.current = null;
     };
-  }, []);
+  }, [loadApi, showLoadError]);
+
+  const openLocalPackage = async (files: FileList | null) => {
+    if (!files?.length) return;
+    setLoadState("loading");
+    setLoadMessage("Reading local package…");
+    try {
+      const api = await LocalPackageApi.fromFiles(files, setLoadMessage);
+      await loadApi(api, "Opening local package…");
+    } catch (error) {
+      showLoadError(error);
+    } finally {
+      if (packageInputRef.current) packageInputRef.current.value = "";
+    }
+  };
 
   const componentById = useMemo(
     () => new Map(session?.components.map((item) => [item.id, item]) ?? []),
@@ -136,9 +173,33 @@ export function ViewerWorkbench() {
         <div className="package-heading">
           <span className="eyebrow">OPEN PACKAGE</span>
           <strong>{session?.package.name ?? "YapRover prototype"}</strong>
-          <span>v{session?.package.version ?? "0.1.0"}</span>
+          <span className="package-version">v{session?.package.version ?? "0.1.0"}</span>
+          <button
+            className="local-open-button"
+            type="button"
+            disabled={loadState === "loading"}
+            onClick={() => packageInputRef.current?.click()}
+          >
+            Open local
+          </button>
+          <input
+            ref={packageInputRef}
+            className="visually-hidden"
+            type="file"
+            aria-label="Choose an unpacked yapCAD package directory"
+            onChange={(event) => void openLocalPackage(event.target.files)}
+            {...{ webkitdirectory: "", directory: "" }}
+          />
         </div>
         <div className="topbar-status">
+          <button
+            className="local-open-button mobile-local-open"
+            type="button"
+            disabled={loadState === "loading"}
+            onClick={() => packageInputRef.current?.click()}
+          >
+            Open
+          </button>
           <span className={`status-dot ${loadState}`} />
           <span>{loadState === "ready" ? `revision ${session?.revision}` : loadState}</span>
           {session && <code>{shortDigest(session.package.digest)}</code>}
@@ -282,7 +343,9 @@ export function ViewerWorkbench() {
         <div className="viewport-caption">
           <span>{scene?.units ?? "millimetre"}</span>
           <span>•</span>
-          <span>{scene?.assets.filter((asset) => asset.sourceRepresentation === "brep").length ?? 0} analytic BREP assets</span>
+          <span>{scene?.assets.some((asset) => asset.sourceRepresentation === "brep")
+            ? `${scene.assets.filter((asset) => asset.sourceRepresentation === "brep").length} analytic BREP assets`
+            : `${scene?.assets.length ?? 0} embedded mesh assets`}</span>
           <span>•</span>
           <span>drag to orbit · scroll to zoom · click to inspect</span>
         </div>
@@ -394,11 +457,28 @@ function PackageInspector({
 }) {
   const makeCount = session?.components.filter((item) => item.disposition === "make").length ?? 0;
   const buyCount = session?.components.filter((item) => item.disposition === "buy").length ?? 0;
+  const localPreview = session?.validation.warnings.some(
+    (warning) => warning.code === "local_mesh_preview",
+  ) ?? false;
+  const validationTitle = localPreview
+    ? "Local preview ready"
+    : session?.validation.valid
+      ? "Package checks passed"
+      : "Package requires review";
   return (
     <div className="inspector-content">
-      <div className="package-summary">
-        <span className="validity-mark">✓</span>
-        <div><strong>Package validated</strong><small>authoritative content unchanged</small></div>
+      <div className={`package-summary${localPreview ? " local-preview" : ""}`}>
+        <span className={`validity-mark${localPreview ? " local-preview" : ""}`}>
+          {localPreview ? "◌" : session?.validation.valid ? "✓" : "!"}
+        </span>
+        <div>
+          <strong>{validationTitle}</strong>
+          <small>
+            {localPreview
+              ? "embedded mesh inspection · OCC validation not run"
+              : "authoritative package content unchanged"}
+          </small>
+        </div>
       </div>
       <div className="metric-grid">
         <div><strong>{session?.parts.length ?? 0}</strong><span>instances</span></div>

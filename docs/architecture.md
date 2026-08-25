@@ -137,6 +137,14 @@ presentation state changes do not rewrite the `.ycpkg` file.
    stable part, component, material, and geometry IDs.
 7. Three.js renders GLB assets and never performs engineering booleans.
 
+The browser also provides an explicit local-preview adapter for unpacked v0.2
+packages selected by the user. It maps the manifest and semantic metadata to
+the same session/scene contracts and converts the already-embedded display
+triangles to in-memory GLB assets. It neither decodes nor validates the BREP,
+and marks this limitation in session diagnostics. Authoritative validation,
+BREP tessellation, pose solving, and network sessions continue to cross the
+Python application-service boundary described above.
+
 GLB is the preferred 3D delivery format because it is compact, broadly
 supported by Three.js, and can retain semantic IDs through node names and
 `extras`. Geometry JSON remains available through explicit engineering APIs,
