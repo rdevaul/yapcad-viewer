@@ -3,6 +3,8 @@
 `yapcad-viewer` is a human- and agent-operable viewer for
 [yapCAD](https://github.com/rdevaul/yapCAD) `.ycpkg` engineering packages.
 
+![yapcad-viewer showing yapRover package](docs/assets/yapRoverView.jpg)
+
 The application is deliberately agent-runtime-neutral. Humans use the web
 interface, scripts use the REST API, and agents use an MCP adapter; all three
 operate the same versioned package-session service.
