@@ -65,7 +65,20 @@ button { color: inherit; }
 
 .package-heading { gap: 10px; padding: 0 20px; min-width: 0; }
 .package-heading strong { font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.package-heading > span:last-child { color: var(--muted); font: 11px var(--font-geist-mono), monospace; }
+.package-version { color: var(--muted); font: 11px var(--font-geist-mono), monospace; }
+.local-open-button {
+  height: 30px; margin-left: auto; padding: 0 11px; border: 1px solid #2d6668;
+  border-radius: 6px; color: var(--cyan); background: var(--cyan-dark);
+  font-size: 10px; cursor: pointer; white-space: nowrap;
+}
+.local-open-button:hover { border-color: var(--cyan); background: #1c4a4e; }
+.local-open-button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+.local-open-button:disabled { opacity: .5; cursor: wait; }
+.mobile-local-open { display: none; }
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
 .eyebrow { color: var(--muted); font: 600 9px var(--font-geist-mono), monospace; letter-spacing: 0.15em; }
 
 .topbar-status { gap: 9px; padding: 0 18px; color: var(--muted); font-size: 11px; }
@@ -161,6 +174,9 @@ button { color: inherit; }
 .warning-copy { color: var(--orange); }
 .package-summary { display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid #24513e; border-radius: 7px; background: rgba(38, 105, 73, 0.12); }
 .validity-mark { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #1c6b4a; color: #b9f4d5; }
+.package-summary.local-preview { border-color: #285c68; background: rgba(26, 105, 116, 0.12); }
+.validity-mark.local-preview { background: #195965; color: #b9f4f2; }
+.package-summary.local-preview small { color: #65aeb5; }
 .package-summary div { display: flex; flex-direction: column; }
 .package-summary strong { font-size: 10px; } .package-summary small { color: #69a987; font-size: 8px; }
 .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin-top: 14px; background: var(--line); border: 1px solid var(--line); border-radius: 7px; overflow: hidden; }
@@ -180,6 +196,7 @@ button { color: inherit; }
   .topbar { grid-template-columns: 1fr auto; }
   .brand-lockup { border: 0; }
   .package-heading { display: none; }
+  .mobile-local-open { display: inline-flex; align-items: center; }
   .topbar-status code { display: none; }
   .assembly-panel { border: 0; border-top: 1px solid var(--line); }
   .panel-heading { min-height: 45px; padding: 8px 14px; }
