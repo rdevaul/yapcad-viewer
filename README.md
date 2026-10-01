@@ -33,8 +33,9 @@ than by merging that branch.
 - Read-only inspection is the default; mutations are explicit and auditable.
 - No agent harness, model provider, or chat implementation is built in.
 
-See [the architecture](docs/architecture.md) and
-[legacy extraction audit](docs/legacy-extraction.md).
+See [the architecture](docs/architecture.md),
+[legacy extraction audit](docs/legacy-extraction.md), and the proposed
+[SDF and large-assembly rendering design](docs/sdf-and-large-assembly-rendering.md).
 
 ## Browser workbench
 
