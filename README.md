@@ -22,7 +22,7 @@ than by merging that branch.
 
 ## Principles
 
-- Analytic BREP in `yapcad-geometry-json-v0.2` remains authoritative.
+- Analytic BREP in `yapcad-geometry-json-v0.2`/`v0.3` remains authoritative.
 - Product-definition packages are validated by yapCAD before a revision-zero
   semantic snapshot is created.
 - Render meshes are deterministic, content-addressed GLB derivatives; repeated

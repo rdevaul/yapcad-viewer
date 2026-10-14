@@ -20,7 +20,9 @@ function fixtureFile(path: string, content: unknown): FixtureFile {
   };
 }
 
-function packageFiles(): FixtureFile[] {
+function packageFiles(
+  geometrySchema = "yapcad-geometry-json-v0.2",
+): FixtureFile[] {
   return [
     fixtureFile("manifest.yaml", `
 schema: ycpkg-spec-v0.2
@@ -35,7 +37,7 @@ components:
     material: petg
     geometry:
       path: geometry/entities/bracket.json
-      schema: yapcad-geometry-json-v0.2
+      schema: ${geometrySchema}
       hash: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 instances:
   - id: bracket
@@ -69,7 +71,7 @@ materials:
       }],
     }),
     fixtureFile("geometry/entities/bracket.json", {
-      schema: "yapcad-geometry-json-v0.2",
+      schema: geometrySchema,
       entities: [{
         id: "surface-1",
         type: "surface",
@@ -111,6 +113,23 @@ describe("local .ycpkg adapter", () => {
     );
   });
 
+  it("reads yapcad-geometry-json-v0.3 preview meshes", async () => {
+    const api = await LocalPackageApi.fromFiles(
+      packageFiles("yapcad-geometry-json-v0.3"),
+    );
+    const { scene } = await api.loadInitial();
+    expect(scene.assets).toHaveLength(1);
+    expect(scene.assets[0].sourceRepresentation).toBe("embedded-mesh");
+    const glb = await api.loadAsset(scene.assets[0].id);
+    expect(new DataView(glb).getUint32(0, true)).toBe(0x46546c67);
+  });
+
+  it("rejects geometry schemas it cannot read", async () => {
+    await expect(
+      LocalPackageApi.fromFiles(packageFiles("yapcad-geometry-json-v9.9")),
+    ).rejects.toThrow("unsupported geometry schema yapcad-geometry-json-v9.9");
+  });
+
   const realPackage = process.env.YAPCAD_VIEWER_TEST_PACKAGE;
   it.skipIf(!realPackage)("opens a generated YapRover package when requested", async () => {
     const root = path.resolve(realPackage!);
@@ -129,9 +148,13 @@ describe("local .ycpkg adapter", () => {
 
     const api = await LocalPackageApi.fromFiles(files);
     const { session, scene } = await api.loadInitial();
-    expect(session.parts).toHaveLength(37);
-    expect(session.mates).toHaveLength(36);
-    expect(scene.assets).toHaveLength(37);
+    // Counts are package-specific (yaprover 0.1.0 had 37 parts, 0.2.0 has 65),
+    // so assert the structural invariants instead of a particular revision.
+    expect(session.parts.length).toBeGreaterThan(0);
+    expect(session.mates.length).toBeGreaterThan(0);
+    expect(scene.nodes).toHaveLength(session.parts.length);
+    expect(scene.assets.length).toBeGreaterThan(0);
+    expect(scene.assets.length).toBeLessThanOrEqual(session.components.length);
     expect(scene.nodes.every((node) => node.assetId)).toBe(true);
     expect(scene.assets.every((asset) => asset.sourceRepresentation === "embedded-mesh")).toBe(true);
   });

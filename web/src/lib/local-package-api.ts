@@ -15,6 +15,15 @@ const MAX_PACKAGE_BYTES = 2 * 1024 * 1024 * 1024;
 const MAX_PACKAGE_FILES = 20_000;
 const LOCAL_GENERATOR = "yapcad-viewer-browser-mesh-v1";
 const TESSELLATION = { linearDeflectionMm: 0.25, angularDeflectionRad: 0.5 };
+// yapcad-geometry-json v0.3 differs from v0.2 only by admitting "sdf" as an
+// authoritative representation (plus optional meshing parameters on `mesh`);
+// surface entities are unchanged, so the preview-mesh path below reads both.
+// Documents that carry no usable preview mesh are rejected by
+// geometryDocumentToGlb, which is the check that actually matters here.
+const SUPPORTED_GEOMETRY_SCHEMAS = new Set([
+  "yapcad-geometry-json-v0.2",
+  "yapcad-geometry-json-v0.3",
+]);
 
 type JsonObject = Record<string, unknown>;
 
@@ -135,8 +144,11 @@ export class LocalPackageApi implements ViewerApi {
       if (!component.geometry?.path) continue;
       onProgress(`Preparing ${component.name ?? component.id} (${index + 1}/${components.length})…`);
       const geometry = await readJson<GeometryDocument>(members, component.geometry.path);
-      if (geometry.schema !== "yapcad-geometry-json-v0.2") {
-        throw new Error(`Component ${component.id} uses unsupported geometry schema ${geometry.schema}`);
+      if (!SUPPORTED_GEOMETRY_SCHEMAS.has(geometry.schema)) {
+        throw new Error(
+          `Component ${component.id} uses unsupported geometry schema ${geometry.schema}; `
+          + `expected one of ${[...SUPPORTED_GEOMETRY_SCHEMAS].join(", ")}`,
+        );
       }
       const glb = geometryDocumentToGlb(geometry, component.id);
       const assetId = await digestBytes(new Uint8Array(glb));

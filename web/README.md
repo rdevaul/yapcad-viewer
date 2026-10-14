@@ -18,7 +18,8 @@ not decode, modify, or claim to validate the authoritative OpenCASCADE BREP.
 Run yapCAD's strict package validation separately for engineering acceptance.
 
 Browser-local import currently supports directory-form `ycpkg-spec-v0.2`
-packages up to 2 GB and 20,000 files. Compressed package archives and
+packages up to 2 GB and 20,000 files, with component geometry in
+`yapcad-geometry-json-v0.2` or `v0.3`. Compressed package archives and
 browser-side posing remain future compatibility work.
 
 ## Development
