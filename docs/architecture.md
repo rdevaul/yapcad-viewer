@@ -33,7 +33,7 @@ source of components and lessons, not the new repository history.
 ## Goals
 
 - Open and validate `.ycpkg` files, including assembly product definitions.
-- Preserve analytic `yapcad-geometry-json-v0.2` BREP as authoritative data.
+- Preserve analytic `yapcad-geometry-json-v0.2`/`v0.3` BREP as authoritative data.
 - Present a semantic product tree linked to renderable scene nodes.
 - Inspect BOM, materials, datums, mates, joint limits, and validation results.
 - Select, isolate, hide, highlight, section, explode, measure, and pose parts.
