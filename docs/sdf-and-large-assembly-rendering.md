@@ -36,9 +36,10 @@ Facts about the current viewer:
 - `contracts/scene-v1.schema.json` allows an asset's `sourceRepresentation` to
   be only `"brep"` or `"embedded-mesh"`, and requires tessellation tolerances on
   every asset.
-- The viewer targets `yapcad-geometry-json-v0.2`. yapCAD now writes v0.3,
-  which adds `"sdf"` as an authoritative representation, with the node tree in
-  `representations.sdf`.
+- The browser loader reads `yapcad-geometry-json-v0.2` and v0.3 (#8). v0.3
+  adds `"sdf"` as an authoritative representation, with the node tree in
+  `representations.sdf`. Nothing in the viewer reads that record yet, so an
+  SDF-authoritative part renders today only if it also ships a preview mesh.
 
 Facts about yapCAD's SDF package (`yapcad.sdf`) that this design relies on:
 
@@ -297,8 +298,9 @@ rendering.
 - An optional **LOD hierarchy** section maps sub-assemblies to merged context
   assets, so the client can stream above the component level.
 - A `set_focus` command and a `focus` field in the session snapshot.
-- Session reading must accept `yapcad-geometry-json-v0.3`. This is a
-  prerequisite for the field tier.
+- Session reading must accept `yapcad-geometry-json-v0.3`. Landed in #8,
+  which accepts the schema and renders its preview meshes; consuming
+  `representations.sdf` remains part of the field tier below.
 
 The architecture's statement that browsers receive *derived render meshes*
 generalizes to *derived render assets*. The SDF tree is sent as a display
@@ -317,7 +319,7 @@ The ID pass, not pixel color, is the agent-facing record of what is visible.
 ## Phasing
 
 1. **Field tier.**
-   - v0.3 session reading;
+   - v0.3 session reading (landed in #8);
    - the GLSL generator for every current node kind;
    - proxy-box compositing with depth;
    - Lipschitz-safe stepping;
