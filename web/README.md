@@ -24,7 +24,8 @@ browser-side posing remain future compatibility work.
 ## Development
 
 Requires Node.js 22.13 or newer. CI exercises both Node.js 22 and the current
-Node.js 24 LTS line; its Node 24 lane also rejects high-severity npm advisories.
+Node.js 24 LTS line; its Node 24 lane also rejects high-severity npm advisories in runtime
+dependencies.
 
 ```bash
 npm ci
