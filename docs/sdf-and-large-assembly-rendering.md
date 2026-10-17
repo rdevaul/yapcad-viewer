@@ -1,6 +1,7 @@
 # SDF and large-assembly rendering
 
-Status: proposed, 2026-10-01
+Status: proposed, 2026-10-01; revised 2026-10-16 with measured meshing
+costs (see Context and problem statement 3).
 
 ## Decision
 
@@ -40,6 +41,17 @@ Facts about the current viewer:
   adds `"sdf"` as an authoritative representation, with the node tree in
   `representations.sdf`. Nothing in the viewer reads that record yet, so an
   SDF-authoritative part renders today only if it also ships a preview mesh.
+- Mesh transport in yapCAD now keeps small faces, dropping only exactly
+  degenerate ones (yapCAD #86), and simplification no longer emits slivers
+  (yapCAD #83). Degeneracy is still judged against an absolute epsilon, so it
+  depends on the units a part is modelled in, and transport and the geometric
+  predicates deliberately disagree about it (yapCAD #85, open). Anything here
+  that reasons about what a preview mesh contains should read that issue
+  first.
+- `docs/sdf-meshing-and-simplifier-performance.md` in yapCAD is the companion
+  to this note: it covers where meshing and simplification spend their time
+  and the feature-size responsive dual contouring that would fix the uniform
+  grid, where this one covers rendering the field without meshing it at all.
 
 Facts about yapCAD's SDF package (`yapcad.sdf`) that this design relies on:
 
@@ -53,7 +65,8 @@ Facts about yapCAD's SDF package (`yapcad.sdf`) that this design relies on:
 - Backends register per node kind (`register_backend(kind, name, fn)`). The
   numpy evaluator is the reference.
 
-The problem has two halves:
+The problem has three parts, the third of which was measured after this
+design was first written:
 
 1. **SDF parts should not need tessellation to be seen.** Meshing an SDF is the
    slowest step in its pipeline and loses detail. Lattices are the worst case:
@@ -64,6 +77,27 @@ The problem has two halves:
    triangle with indexed positions and normals, that is tens of gigabytes —
    beyond any GPU, and beyond what `load()`'s fetch-everything approach can
    transfer.
+3. **Small parts with fine features are not meshable at interactive rates
+   either, and are not yet meshable correctly at all.** This is not only a
+   problem of scale. A 70 x 30 x 4 mm plate with three lines of 3 mm engraved
+   block text — a field of a slab minus 212 stroke boxes — took 674 seconds to
+   mesh and simplify, and yapCAD's recent union culling and batch
+   consolidation have that at 147 seconds. The raw mesh is 227,512 triangles
+   for a part whose simplified form is 8,784, and it still carries 62 boundary
+   edges, because a uniform grid must be fine enough everywhere for the
+   smallest feature anywhere, and even at 326^3 cells a 0.43 mm stroke gets
+   only two 0.215 mm cells across it — thin enough that the surface begins
+   passing through single cells twice (yapCAD #94). Raising the resolution
+   does not escape it: at 490^3 the same plate fails outright with 165
+   coincident vertices. There is no resolution at which that plate meshes
+   cleanly.
+
+   A raymarched preview needs none of it. This is the argument that separates
+   the two jobs: **a preview is a picture, and a picture need not be
+   watertight.** Meshing exists to feed manufacturing, where correctness
+   matters and latency does not; rendering wants the opposite trade, and
+   trying to serve both from one tessellation is what makes engraved lettering
+   look like an intractable problem rather than a shader.
 
 ## Goals
 
@@ -212,8 +246,12 @@ Mesh decimation is the obvious alternative for context, and it remains the
 right tool for large, simple parts. It degrades worst on exactly what fills a
 vehicle: fasteners, brackets, harnesses, tubing and lattices. These have thin
 features and topology that simplification either keeps (no savings) or
-destroys (holes, popping). Splat generation is uniform for every source
-representation and every shape. A coarser level of detail is computed by
+destroys (holes, popping). That is now measured rather than asserted: the
+engraved plate in problem statement 3 spends 97% of its pipeline in
+simplification, and the simplified result still has 62 boundary edges. The
+parts that fill a vehicle are the parts decimation handles worst. Splat
+generation, by contrast, is uniform for every source representation and every
+shape. A coarser level of detail is computed by
 fitting one Gaussian to a group of children, so the hierarchy needs no mesh
 topology at all.
 
@@ -318,15 +356,19 @@ The ID pass, not pixel color, is the agent-facing record of what is visible.
 
 ## Phasing
 
-1. **Field tier.**
-   - v0.3 session reading (landed in #8);
+1. **Field tier.** In the viewer:
+   - reading `representations.sdf` from the v0.3 record the loader already
+     accepts (#8);
    - the GLSL generator for every current node kind;
    - proxy-box compositing with depth;
    - Lipschitz-safe stepping;
-   - capped sections;
-   - the conformance fixture in yapCAD and its viewer CI check.
+   - capped sections.
 
-   This is the bulk of the SDF value, at an estimated one to two weeks.
+   In yapCAD, and a prerequisite for the generator's CI check rather than for
+   the generator itself: the conformance fixture. The viewer work is an
+   estimated one to two weeks; the fixture is not costed here and should be
+   scheduled with yapCAD's meshing work, since it is the same per-node-kind
+   audit.
 2. **Field interaction.** Picking, x-ray, feature-edge "wireframe", subtree
    culling and progressive refinement.
 3. **On-demand loading.**
@@ -367,6 +409,11 @@ scaffolding the splat tier plugs into, and they pay off on their own.
 - **Live SDF editing.** Whether parameter edits should round-trip through the
   backend (authoritative, revision-checked) or preview locally through the
   interpreter shader first.
-- **Acceptance fixture.** YapRover is too small to exercise the splat tier.
-  Phase 4 needs a large synthetic assembly: many instanced fasteners, tubing
-  and lattice parts, at 10^5+ instances.
+- **Acceptance fixture.** The field tier has a cheap one available now: the
+  engraved plate from problem statement 3, whose field is three lines of block
+  text subtracted from a slab. It is a few hundred nodes, it is the case that
+  defeats meshing, and anyone can regenerate it, so it should be the phase-1
+  target — if lettering reads sharply at zoom and sections cap correctly, the
+  tier works. The splat tier has no such shortcut: YapRover is far too small,
+  and phase 4 needs a large synthetic assembly — many instanced fasteners,
+  tubing and lattice parts, at 10^5+ instances.
